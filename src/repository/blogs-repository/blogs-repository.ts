@@ -3,6 +3,7 @@ import { BlogDbType } from './types/blog-types';
 import { newModelBlog } from './utils/newModelBlog';
 import { updateBlogModel } from './utils/updateBlogModel';
 import { requestBlogsType } from './types/transaction-types-blogs';
+import { postsRepository } from '../posts-repository/posts-repository';
 
 let blogsDb: BlogDbType[] = [];
 
@@ -27,16 +28,17 @@ export const blogsRepository = {
     const blog = blogsRepository.getBlogById(id);
     if (blog) {
       const updateModel = updateBlogModel(reqBody);
-      blogsDb = blogsDb.map((el) => (el.id === id ? { ...updateModel, id: el.id } : el));
+      blogsDb = blogsDb.map((el) => (el.id === id ? { ...el, ...updateModel } : el));
       return true;
     } else {
       return false;
     }
   },
-  deleteById: (id: string): boolean => {
+  deleteBlogById: (id: string): boolean => {
     const blog = blogsRepository.getBlogById(id);
     if (blog) {
       blogsDb = blogsDb.filter((el) => el.id !== id);
+      postsRepository.deletePostsByBlogId(id);
       return true;
     } else {
       return false;

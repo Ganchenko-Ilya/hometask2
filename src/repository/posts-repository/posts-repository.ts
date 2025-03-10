@@ -30,17 +30,16 @@ export const postsRepository = {
     }
   },
   updatePostById: (id: string, reqBody: requestPostsType): boolean => {
-    const blog = blogsRepository.getBlogById(reqBody.blogId);
     const post = postsRepository.getPostById(id);
-    if (blog && post) {
-      const updatePost = { ...updatePostModel(reqBody), id, blogName: post.blogName };
-      postsDb = postsDb.map((el) => (el.id === id ? { ...updatePost } : el));
+    if (post) {
+      const model = updatePostModel(reqBody);
+      postsDb = postsDb.map((el) => (el.id === id ? { ...el, ...model } : el));
       return true;
     } else {
       return false;
     }
   },
-  deletePostbyId: (id: string): boolean => {
+  deletePostById: (id: string): boolean => {
     const post = postsRepository.getPostById(id);
     if (post) {
       postsDb = postsDb.filter((el) => el.id !== id);
@@ -48,6 +47,9 @@ export const postsRepository = {
     } else {
       return false;
     }
+  },
+  deletePostsByBlogId: (blogId: string) => {
+    postsDb = postsDb.filter((el) => el.blogId !== blogId);
   },
   deletePosts: () => {
     postsDb = [];
