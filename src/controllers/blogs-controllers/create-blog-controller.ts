@@ -6,5 +6,5 @@ export const createBlogController = (req: Request<unknown, unknown, requestBlogs
   res.setHeader('Content-Security-Policy', "default-src 'self'; connect-src 'self' http://localhost:3003");
   const blog = blogsRepository.createBlog(req.body);
 
-  res.status(200).send(blog);
+  res.status(201).send(blog);
 };

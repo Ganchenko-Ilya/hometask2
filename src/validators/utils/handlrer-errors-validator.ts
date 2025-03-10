@@ -7,7 +7,10 @@ export const handlerErrorsValidator = (req: Request, res: Response, next: NextFu
   if (result.isEmpty()) {
     next();
   } else {
-    const errorsMessages = result.array().map((el: FieldValidationError) => ({ message: el.msg, field: el.path }));
+    const errorsMessages = result.array({ onlyFirstError: true }).map((el: FieldValidationError) => ({
+      message: el.msg,
+      field: el.path,
+    }));
     res.status(400).send({ errorsMessages });
   }
 };

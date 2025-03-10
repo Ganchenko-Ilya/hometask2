@@ -5,7 +5,7 @@ import { requestPostsType } from '../../repository/posts-repository/types/transa
 export const createPostController = (req: Request<unknown, unknown, requestPostsType>, res: Response) => {
   const post = postsRepository.createPost(req.body);
   if (post) {
-    res.status(200).send(post);
+    res.status(201).send(post);
   } else {
     res.status(404).end();
   }
