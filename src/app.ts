@@ -13,4 +13,5 @@ app.use('/posts', postsRouters);
 
 app.delete('/testing/all-data', (req: Request, res: Response) => {
   deleteAll();
+  res.status(204).end();
 });
