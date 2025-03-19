@@ -5,22 +5,30 @@ import { updateBlogModel } from './utils/updateBlogModel';
 import { requestBlogsType } from './types/requests-types-blogs';
 import { postsRepository } from '../posts-repository/posts-repository';
 import { blogsCollection } from '../../db/db';
+import { resDateWithoutMongoId } from '../utils/resDateWithoutMongoId';
+import { BlogsCollectionType } from '../../db/type/collectionsType';
 
 export const blogsRepository = {
   getBlogs: async (): Promise<BlogDbType[]> => {
-    const a = await blogsCollection.find().toArray();
-    a[0].createdAt = '1';
-    return blogsCollection.find().toArray();
+    const blogs = await blogsCollection.find().toArray();
+    const response = resDateWithoutMongoId(blogs) as BlogDbType[];
+    return response;
   },
   createBlog: async (reqBody: requestBlogsType): Promise<BlogDbType> => {
-    const newBlog = newModelBlog(reqBody);
+    const newBlog = newModelBlog(reqBody) as BlogsCollectionType;
+
     await blogsCollection.insertOne(newBlog);
-    return { ...newBlog };
+
+    const response = resDateWithoutMongoId(newBlog) as BlogDbType;
+
+    return response;
   },
   getBlogById: async (id: string): Promise<BlogDbType | undefined> => {
     const blog = await blogsCollection.findOne({ id });
+
     if (blog) {
-      return { ...blog };
+      const response = resDateWithoutMongoId(blog) as BlogDbType;
+      return response;
     } else {
       return undefined;
     }

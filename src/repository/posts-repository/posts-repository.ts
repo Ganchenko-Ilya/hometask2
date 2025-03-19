@@ -4,17 +4,25 @@ import { newModelPost } from './utils/newModelPost';
 import { blogsRepository } from '../blogs-repository/blogs-repository';
 import { updatePostModel } from './utils/updatePostModel';
 import { postsCollection } from '../../db/db';
+import { resDateWithoutMongoId } from '../utils/resDateWithoutMongoId';
+import { PostsCollectionType } from '../../db/type/collectionsType';
 
 export const postsRepository = {
   getPosts: async (): Promise<PostDbType[]> => {
-    return postsCollection.find().toArray();
+    const posts = await postsCollection.find().toArray();
+    const response = resDateWithoutMongoId(posts) as PostDbType[];
+    return response;
   },
   createPost: async (reqBody: requestPostsType): Promise<PostDbType | undefined> => {
     const blog = await blogsRepository.getBlogById(reqBody.blogId);
     if (blog) {
-      const newPost: PostDbType = newModelPost(reqBody, blog.name);
+      const newPost = newModelPost(reqBody, blog.name) as PostsCollectionType;
+
       await postsCollection.insertOne(newPost);
-      return { ...newPost };
+
+      const response = resDateWithoutMongoId(newPost) as PostDbType;
+
+      return response;
     } else {
       return undefined;
     }
@@ -22,7 +30,8 @@ export const postsRepository = {
   getPostById: async (id: string): Promise<PostDbType | undefined> => {
     const post = await postsCollection.findOne({ id });
     if (post) {
-      return { ...post };
+      const response = resDateWithoutMongoId(post) as PostDbType;
+      return response;
     } else {
       return undefined;
     }
