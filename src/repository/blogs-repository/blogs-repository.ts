@@ -2,49 +2,49 @@ import { BlogDbType } from './types/blog-types';
 
 import { newModelBlog } from './utils/newModelBlog';
 import { updateBlogModel } from './utils/updateBlogModel';
-import { requestBlogsType } from './types/transaction-types-blogs';
+import { requestBlogsType } from './types/requests-types-blogs';
 import { postsRepository } from '../posts-repository/posts-repository';
-
-let blogsDb: BlogDbType[] = [];
+import { blogsCollection } from '../../db/db';
 
 export const blogsRepository = {
-  getBlogs: (): BlogDbType[] => {
-    return [...blogsDb];
+  getBlogs: async (): Promise<BlogDbType[]> => {
+    const a = await blogsCollection.find().toArray();
+    a[0].createdAt = '1';
+    return blogsCollection.find().toArray();
   },
-  createBlog: (reqBody: requestBlogsType): BlogDbType => {
+  createBlog: async (reqBody: requestBlogsType): Promise<BlogDbType> => {
     const newBlog = newModelBlog(reqBody);
-    blogsDb.push(newBlog);
+    await blogsCollection.insertOne(newBlog);
     return { ...newBlog };
   },
-  getBlogById: (id: string): BlogDbType | undefined => {
-    const blog = blogsDb.find((el) => el.id === id);
+  getBlogById: async (id: string): Promise<BlogDbType | undefined> => {
+    const blog = await blogsCollection.findOne({ id });
     if (blog) {
       return { ...blog };
     } else {
       return undefined;
     }
   },
-  updateBlogById: (id: string, reqBody: requestBlogsType): boolean => {
-    const blog = blogsRepository.getBlogById(id);
-    if (blog) {
-      const updateModel = updateBlogModel(reqBody);
-      blogsDb = blogsDb.map((el) => (el.id === id ? { ...el, ...updateModel } : el));
+  updateBlogById: async (id: string, reqBody: requestBlogsType): Promise<boolean> => {
+    const updateModel = updateBlogModel(reqBody);
+    const updateProcess = await blogsCollection.updateOne({ id }, { $set: updateModel });
+
+    if (updateProcess.matchedCount) {
       return true;
     } else {
       return false;
     }
   },
-  deleteBlogById: (id: string): boolean => {
-    const blog = blogsRepository.getBlogById(id);
-    if (blog) {
-      blogsDb = blogsDb.filter((el) => el.id !== id);
-      postsRepository.deletePostsByBlogId(id);
+  deleteBlogById: async (id: string): Promise<boolean> => {
+    const deleteProcess = await blogsCollection.deleteOne({ id });
+    if (deleteProcess.deletedCount) {
+      await postsRepository.deletePostsByBlogId(id);
       return true;
     } else {
       return false;
     }
   },
-  deleteBlogs: () => {
-    blogsDb = [];
+  deleteBlogs: async () => {
+    await blogsCollection.drop();
   },
 };

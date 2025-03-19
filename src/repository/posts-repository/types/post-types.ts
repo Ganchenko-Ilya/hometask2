@@ -5,4 +5,5 @@ export type PostDbType = {
   content: string; //maxLength: 1000
   blogId: string;
   blogName: string;
+  createdAt: string;
 };

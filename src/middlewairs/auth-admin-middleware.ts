@@ -1,11 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
 import { SETTINGS } from '../settings';
 
-const ADMIN_AUTH = SETTINGS.ADMIN;
+const ADMIN_AUTH = SETTINGS.ADMIN_AUTH;
 
 export const authAdminMiddleware = (req: Request, res: Response, next: NextFunction) => {
   const authorization = req.headers.authorization;
-
   if (authorization) {
     const authToUTF8 = Buffer.from(authorization.slice(6), 'base64').toString('utf-8');
 
@@ -14,9 +13,9 @@ export const authAdminMiddleware = (req: Request, res: Response, next: NextFunct
     if (isFirsPartCorrected && isSecondPartCorrected) {
       next();
     } else {
-      res.status(401).end();
+      res.sendStatus(401);
     }
   } else {
-    res.status(401).end();
+    res.sendStatus(401);
   }
 };
