@@ -46,11 +46,15 @@ const sortSanitizer: RequestHandler<unknown, unknown, unknown, unknown> = (req, 
 
   if (isArraySortBy && isArraySortDirection) {
     for (let i = 0; i < sortBy.length; i++) {
-      sorts[sortBy[i]] = sortDirection[i] === 'asc' ? 1 : -1;
+      if (sortBy[i] === 'createdAt') {
+        sorts[sortBy[i]] = sortDirection[i] === 'asc' ? -1 : 1;
+      } else {
+        sorts[sortBy[i]] = sortDirection[i] === 'asc' ? 1 : 1;
+      }
     }
   } else {
     if (!isArraySortBy) {
-      sorts[sortBy] = sortDirection === 'asc' ? 1 : -1;
+      sorts[sortBy] = sortDirection === 'asc' ? -1 : 1;
     }
   }
 
