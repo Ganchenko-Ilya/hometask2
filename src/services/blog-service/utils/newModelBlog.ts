@@ -10,6 +10,5 @@ export const newModelBlog = (reqBody: RequestBlogType): NewModelBlogType => {
     websiteUrl,
     createdAt: createNewDateFormatISO(),
     isMembership: false,
-    _id: new ObjectId(),
   };
 };
