@@ -11,6 +11,5 @@ export const newModelPost = (reqBody: RequestPostType & { blogName: string }): P
     title,
     createdAt: createNewDateFormatISO(),
     blogName,
-    _id: new ObjectId(),
   };
 };

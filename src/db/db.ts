@@ -5,7 +5,10 @@ import { BlogsDbType } from '../types/blogs-types/blogs-type';
 
 const uri = SETTINGS.MONGO_URL;
 
-const client = new MongoClient(uri);
+// const client = new MongoClient(uri);
+const client = new MongoClient(
+  'mongodb+srv://admin:admin@mycluster.6vqlf.mongodb.net/?retryWrites=true&w=majority&appName=myCluster',
+);
 
 export const db = client.db('blogsPlatform');
 
