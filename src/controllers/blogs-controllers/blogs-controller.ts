@@ -56,22 +56,34 @@ export const blogsController = {
     res: Response,
   ) => {
     try {
-      const totalCount = await queryRepository.getTotalCount('posts', 'title', req.query.searchNameTerm, {
-        blogId: req.params.id,
-      });
-      const variables = variablesForGetDataSlicesFunc(req.query, totalCount);
-      const posts = await queryRepository.getCollection<PostsDbType>('posts', 'title', variables.variablesForGetData, {
-        blogId: req.params.id,
-      });
-      const postsWithId = queryRepository.mapToResponseWithId(posts);
-      const postsWithPagination = queryRepository.mapToResponseWithPagination(
-        postsWithId,
-        variables.variablesForPagination,
-      );
-      if (postsWithPagination.items.length || !req.query.searchNameTerm) {
-        res.status(200).send(postsWithPagination);
+      const _id = new ObjectId(req.params.id);
+
+      const blog = await queryRepository.getCollectionItemById<BlogsDbType>(_id, 'blogs');
+      if (blog) {
+        const totalCount = await queryRepository.getTotalCount('posts', 'title', req.query.searchNameTerm, {
+          blogId: req.params.id,
+        });
+        const variables = variablesForGetDataSlicesFunc(req.query, totalCount);
+        const posts = await queryRepository.getCollection<PostsDbType>(
+          'posts',
+          'title',
+          variables.variablesForGetData,
+          {
+            blogId: req.params.id,
+          },
+        );
+        const postsWithId = queryRepository.mapToResponseWithId(posts);
+        const postsWithPagination = queryRepository.mapToResponseWithPagination(
+          postsWithId,
+          variables.variablesForPagination,
+        );
+        if (postsWithPagination.items.length || !req.query.searchNameTerm) {
+          res.status(200).send(postsWithPagination);
+        } else {
+          res.sendStatus(404);
+        }
       } else {
-        res.status(404);
+        res.sendStatus(404);
       }
     } catch (e: unknown) {
       res.sendStatus(500);
@@ -105,10 +117,10 @@ export const blogsController = {
           const responseWithId = queryRepository.mapToResponseWithId(response);
           res.status(201).send(...responseWithId);
         } else {
-          res.status(404).send('blogId is not found');
+          res.sendStatus(404);
         }
       } else {
-        res.status(404).send('blogId is not found');
+        res.sendStatus(404);
       }
     } catch (e) {
       res.status(500).send(e);
