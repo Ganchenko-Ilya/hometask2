@@ -15,7 +15,7 @@ export type BlogsDbType = NewModelBlogType & { _id: ObjectId };
 
 export type PaginationType = {
   pagesCount: number;
-  pageNumber: number;
+  page: number;
   pageSize: number;
   totalCount: number;
 };
