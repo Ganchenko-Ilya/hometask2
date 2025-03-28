@@ -1,16 +1,12 @@
 import { Router } from 'express';
-import { getBlogsController } from '../controllers/blogs-controllers/get-blogs-controller';
-import { getBlogIdController } from '../controllers/blogs-controllers/get-blog-controller';
-import { createBlogController } from '../controllers/blogs-controllers/create-blog-controller';
-import { updateBlogController } from '../controllers/blogs-controllers/update-blog-controller';
-import { deleteBlogController } from '../controllers/blogs-controllers/delete-blog-controller';
-import { authAdminMiddleware } from '../middlewairs/auth-admin-middleware';
-import { blogsValidator } from '../validators/blogs-validators/blogs-validator';
+import { blogsRoutersMiddlewares } from './blogs-middlewares/blogs-middlewares';
 
 export const blogsRouters = Router();
 
-blogsRouters.get('/', getBlogsController);
-blogsRouters.get('/:id', getBlogIdController);
-blogsRouters.post('/', authAdminMiddleware, ...blogsValidator, createBlogController);
-blogsRouters.put('/:id', authAdminMiddleware, ...blogsValidator, updateBlogController);
-blogsRouters.delete('/:id', authAdminMiddleware, deleteBlogController);
+blogsRouters.get('/', ...blogsRoutersMiddlewares.getBlogs);
+blogsRouters.get('/:id', ...blogsRoutersMiddlewares.getBlogById);
+blogsRouters.post('/', ...blogsRoutersMiddlewares.createBlog);
+blogsRouters.put('/:id', ...blogsRoutersMiddlewares.updateBlog);
+blogsRouters.get('/:id/posts', ...blogsRoutersMiddlewares.getPostsByBlogId);
+blogsRouters.post('/:id/posts', ...blogsRoutersMiddlewares.createPostByBlogId);
+blogsRouters.delete('/:id', ...blogsRoutersMiddlewares.deleteBlog);

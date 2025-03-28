@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import { blogsRouters } from './routes/blogs-routers';
 import { postsRouters } from './routes/posts-routers';
-import { deleteAll } from './testing/deleteAll';
+import { deleteAll } from './testing/delete-controller/deleteAll';
 import { SETTINGS } from './settings';
 
 const cors = require('cors');
@@ -15,5 +15,6 @@ app.use(SETTINGS.PATH_POSTS, postsRouters);
 
 app.delete('/testing/all-data', (req: Request, res: Response) => {
   deleteAll();
-  res.status(204).end();
+
+  res.sendStatus(204);
 });

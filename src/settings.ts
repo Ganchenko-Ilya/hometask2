@@ -1,7 +1,6 @@
 import dotenv from 'dotenv';
 
 dotenv.config();
-
 export const SETTINGS = {
   ADMIN_AUTH: process.env.ADMIN_AUTH,
   PORT: process.env.PORT || 3003,

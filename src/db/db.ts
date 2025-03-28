@@ -1,24 +1,22 @@
-import { Collection, MongoClient } from 'mongodb';
+import { MongoClient } from 'mongodb';
 import { SETTINGS } from '../settings';
-import { BlogsCollectionType, PostsCollectionType } from './type/collectionsType';
+import { PostsDbType } from '../types/posts-types/posts-type';
+import { BlogsDbType } from '../types/blogs-types/blogs-type';
 
 const uri = SETTINGS.MONGO_URL;
 
 const client = new MongoClient(uri);
 
-const db = client.db('blogsPlatform');
+export const db = client.db('blogsPlatform');
 
-export let blogsCollection: Collection<BlogsCollectionType>;
-export let postsCollection: Collection<PostsCollectionType>;
+export let blogsCollection = db.collection<BlogsDbType>('blogs');
+export let postsCollection = db.collection<PostsDbType>('posts');
 
 export async function run() {
   try {
     await client.connect();
 
     await client.db('admin').command({ ping: 1 });
-
-    blogsCollection = db.collection('blogs');
-    postsCollection = db.collection('posts');
 
     console.log('Pinged your deployment. You successfully connected to MongoDB!');
     return true;
