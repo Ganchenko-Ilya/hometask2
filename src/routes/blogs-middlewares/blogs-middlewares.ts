@@ -8,7 +8,7 @@ import { blogsInputValidator } from '../../middlewairs/validate-middleawairs/col
 import { postsInputValidator } from '../../middlewairs/validate-middleawairs/collections-validators/posts-validators/posts-input-validator';
 
 export const blogsRoutersMiddlewares = {
-  getBlogs: [...queryValidators, ...queryBaseSanitizers(), blogsController.getBlogs],
+  getBlogs: [...queryValidators, ...queryBaseSanitizers(true), blogsController.getBlogs],
   getBlogById: [paramIdValidator, handlerErrorsValidator, blogsController.getBlogById],
   createBlog: [authAdminMiddleware, ...blogsInputValidator, blogsController.createBlog],
   createPostByBlogId: [
