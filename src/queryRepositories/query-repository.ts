@@ -52,6 +52,12 @@ export const queryRepository = {
     searchNameTerm: string,
     filterBy?: Record<string, unknown>,
   ) => {
-    return db.collection(nameCollection).countDocuments({ [searchBy]: { $regex: searchNameTerm }, ...filterBy });
+    return db.collection(nameCollection).countDocuments({
+      [searchBy]: {
+        $regex: searchNameTerm,
+        $options: 'i',
+      },
+      ...filterBy,
+    });
   },
 };
