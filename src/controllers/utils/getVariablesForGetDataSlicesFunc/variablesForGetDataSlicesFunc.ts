@@ -8,6 +8,6 @@ export const variablesForGetDataSlicesFunc = (
   const pagesCount = Math.ceil(totalCount / pageSize);
   return {
     variablesForGetData: { pageSize, searchNameTerm, formattedSorts, skipBlogs, pagesCount },
-    variablesForPagination: { pageSize, totalCount, page: pageNumber, pagesCount },
+    variablesForPagination: { pagesCount, page: pageNumber, pageSize, totalCount },
   };
 };
