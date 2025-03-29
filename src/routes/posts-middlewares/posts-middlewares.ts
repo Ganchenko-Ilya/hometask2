@@ -7,7 +7,7 @@ import { postsController } from '../../controllers/posts-controllers/posts-contr
 import { postsInputValidator } from '../../middlewairs/validate-middleawairs/collections-validators/posts-validators/posts-input-validator';
 
 export const postsRoutersMiddlewares = {
-  getPosts: [...queryValidators, ...queryBaseSanitizers, postsController.getPosts],
+  getPosts: [...queryValidators, ...queryBaseSanitizers(), postsController.getPosts],
   getPostById: [paramIdValidator, handlerErrorsValidator, postsController.getPostById],
   createPost: [authAdminMiddleware, ...postsInputValidator, postsController.createPost],
   updatePost: [paramIdValidator, authAdminMiddleware, ...postsInputValidator, postsController.updatePost],

@@ -8,7 +8,7 @@ import { blogsInputValidator } from '../../middlewairs/validate-middleawairs/col
 import { postsInputValidator } from '../../middlewairs/validate-middleawairs/collections-validators/posts-validators/posts-input-validator';
 
 export const blogsRoutersMiddlewares = {
-  getBlogs: [...queryValidators, ...queryBaseSanitizers, blogsController.getBlogs],
+  getBlogs: [...queryValidators, ...queryBaseSanitizers(), blogsController.getBlogs],
   getBlogById: [paramIdValidator, handlerErrorsValidator, blogsController.getBlogById],
   createBlog: [authAdminMiddleware, ...blogsInputValidator, blogsController.createBlog],
   createPostByBlogId: [
@@ -18,6 +18,11 @@ export const blogsRoutersMiddlewares = {
     blogsController.createPostByBlogId,
   ],
   updateBlog: [paramIdValidator, authAdminMiddleware, ...blogsInputValidator, blogsController.updateBlog],
-  getPostsByBlogId: [paramIdValidator, ...queryValidators, ...queryBaseSanitizers, blogsController.getPostsByBlogId],
+  getPostsByBlogId: [
+    paramIdValidator,
+    ...queryValidators,
+    ...queryBaseSanitizers(true),
+    blogsController.getPostsByBlogId,
+  ],
   deleteBlog: [paramIdValidator, authAdminMiddleware, handlerErrorsValidator, blogsController.deleteBlog],
 };
