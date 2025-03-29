@@ -1,6 +1,7 @@
 import { body } from 'express-validator';
 
 export const createInputDefaultValidator = (length: { min: number; max: number }, fieldName: string) => {
+  console.log(1);
   return body(fieldName)
     .trim()
     .isString()
