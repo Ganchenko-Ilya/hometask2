@@ -53,18 +53,18 @@ const pageSizeValidator = query('pageSize')
 //       'for sorting and sortBy Array shout not be less sortDirection Array  ',
 //   );
 
-const sortDirectionValidator = query('sortDirection')
-  .trim()
-  .custom((value) => {
-    if (accessDirections.includes(value) || !value) {
-      return true;
-    }
-    if (Array.isArray(value)) {
-      return value.every((el) => accessDirections.includes(el));
-    }
-    return false;
-  })
-  .withMessage('sortDirection shout be string or array with types  asc | desc');
+// const sortDirectionValidator = query('sortDirection')
+//   .trim()
+//   .custom((value) => {
+//     if (accessDirections.includes(value) || !value) {
+//       return true;
+//     }
+//     if (Array.isArray(value)) {
+//       return value.every((el) => accessDirections.includes(el));
+//     }
+//     return false;
+//   })
+//   .withMessage('sortDirection shout be string or array with types  asc | desc');
 
 const searchNameTermValidator = query('searchNameTerm')
   .trim()
@@ -74,7 +74,7 @@ export const queryValidators = [
   pageNumberValidator,
   pageSizeValidator,
   // sortByValidator,
-  sortDirectionValidator,
+  // sortDirectionValidator,
   searchNameTermValidator,
   handlerErrorsValidator,
 ];
