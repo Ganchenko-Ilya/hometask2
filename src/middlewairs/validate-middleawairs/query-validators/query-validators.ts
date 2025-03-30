@@ -32,16 +32,14 @@ const sortByValidator = query('sortBy')
       }
     }
     if (Array.isArray(value)) {
-      const isValidSortBy = value.every((el) => accessSortNames.includes(el));
-
       if (isArraySortDirection) {
         if (sortDirection.length > value.length) {
           return false;
         } else {
-          return isValidSortBy;
+          return true;
         }
       } else {
-        return isValidSortBy;
+        return true;
       }
     } else if (isArraySortDirection) {
       return false;
