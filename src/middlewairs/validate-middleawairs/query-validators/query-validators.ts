@@ -29,6 +29,8 @@ const sortByValidator = query('sortBy')
     if (!value || !Array.isArray(value)) {
       if (!isArraySortDirection) {
         return true;
+      } else {
+        return false;
       }
     }
     if (Array.isArray(value)) {
@@ -44,7 +46,6 @@ const sortByValidator = query('sortBy')
     } else if (isArraySortDirection) {
       return false;
     }
-    return false;
   })
   .withMessage(
     'sortBy shout be string or array with  Blog item types that  access ' +
