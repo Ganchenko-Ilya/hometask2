@@ -13,7 +13,7 @@ export const queryRepository = {
     const { pageSize, searchNameTerm, formattedSorts, skipBlogs } = queryParams;
 
     const filters = { [searchName]: { $regex: searchNameTerm, $options: 'i' }, ...filterBy } as Filter<T>;
-    console.log(filters, searchNameTerm);
+
     const data = await db
       .collection<T>(nameCollection)
       .find(filters)

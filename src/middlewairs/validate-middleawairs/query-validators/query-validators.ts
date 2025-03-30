@@ -68,8 +68,6 @@ const sortDirectionValidator = query('sortDirection')
 const searchNameTermValidator = query('searchNameTerm')
   .trim()
   .customSanitizer((value) => {
-    console.log(value);
-
     return value || null;
   });
 

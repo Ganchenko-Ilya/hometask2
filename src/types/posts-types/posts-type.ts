@@ -13,4 +13,4 @@ export type NewModelPostType = RequestPostType & {
   blogName: string;
   createdAt: string;
 };
-export type PostsDbType = NewModelPostType & { _id?: ObjectId };
+export type PostsDbType = NewModelPostType & { _id: ObjectId };

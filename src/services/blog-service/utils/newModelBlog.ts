@@ -1,8 +1,8 @@
 import { createNewDateFormatISO } from '../../utils/createNewDateFormatISO';
-import { NewModelBlogType, RequestBlogType } from '../../../types/blogs-types/blogs-type';
+import { BlogsDbType, NewModelBlogType, RequestBlogType } from '../../../types/blogs-types/blogs-type';
 import { ObjectId } from 'mongodb';
 
-export const newModelBlog = (reqBody: RequestBlogType): NewModelBlogType => {
+export const newModelBlog = (reqBody: RequestBlogType): BlogsDbType => {
   const { name, description, websiteUrl } = reqBody;
   return {
     name,
@@ -10,5 +10,6 @@ export const newModelBlog = (reqBody: RequestBlogType): NewModelBlogType => {
     websiteUrl,
     createdAt: createNewDateFormatISO(),
     isMembership: false,
+    _id: new ObjectId(),
   };
 };

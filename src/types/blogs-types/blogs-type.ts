@@ -9,9 +9,9 @@ export type RequestBlogType = {
 export type NewModelBlogType = RequestBlogType & {
   createdAt: string;
   isMembership: boolean;
-} & { _id?: ObjectId };
+};
 
-export type BlogsDbType = NewModelBlogType & { _id?: ObjectId };
+export type BlogsDbType = NewModelBlogType & { _id: ObjectId };
 
 export type PaginationType = {
   pagesCount: number;

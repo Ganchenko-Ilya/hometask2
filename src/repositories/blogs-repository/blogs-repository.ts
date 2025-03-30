@@ -7,7 +7,7 @@ export const blogsRepository = {
   getBlogs: async (): Promise<BlogsDbType[]> => {
     return blogsCollection.find().toArray();
   },
-  createBlog: async (newBlog: NewModelBlogType) => {
+  createBlog: async (newBlog: BlogsDbType) => {
     return blogsCollection.insertOne(newBlog);
   },
   getBlogById: async (_id: ObjectId): Promise<BlogsDbType | undefined> => {
