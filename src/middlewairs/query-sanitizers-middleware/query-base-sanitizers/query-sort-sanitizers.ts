@@ -69,7 +69,7 @@ const sortDirectionSanitizer = query('sortDirection').customSanitizer((value, { 
   const sortByValue = req.query?.sortBy;
 
   const isArraySortBy = Array.isArray(sortByValue);
-  console.log(sortByValue);
+
   const isArraySortDirection = Array.isArray(value);
 
   const sortByLength = sortByValue.length;
