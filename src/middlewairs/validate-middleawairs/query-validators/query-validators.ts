@@ -25,8 +25,7 @@ const sortByValidator = query('sortBy')
   .custom((value, { req }) => {
     const sortDirection = req.query?.sortDirection;
     const isArraySortDirection = Array.isArray(sortDirection);
-    console.log(isArraySortDirection);
-    console.log(!value);
+
     if (!value || !Array.isArray(value)) {
       if (!isArraySortDirection) {
         return true;
@@ -68,7 +67,11 @@ const sortByValidator = query('sortBy')
 
 const searchNameTermValidator = query('searchNameTerm')
   .trim()
-  .customSanitizer((value) => value || null);
+  .customSanitizer((value) => {
+    console.log(value);
+
+    return value || null;
+  });
 
 export const queryValidators = [
   pageNumberValidator,
