@@ -20,43 +20,43 @@ const pageSizeValidator = query('pageSize')
   .custom((value) => !!+value || !value)
   .withMessage('pageSize shout be is  number type');
 
-// const sortByValidator = query('sortBy')
-//   .trim()
-//   .custom((value, { req }) => {
-//     const sortDirection = req.query?.sortDirection;
-//     const isArraySortDirection = Array.isArray(sortDirection);
-//
-//     if (accessSortNames.includes(value) || !value) {
-//       if (!isArraySortDirection) {
-//         return true;
-//       }
-//     }
-//     if (Array.isArray(value)) {
-//       const isValidSortBy = value.every((el) => accessSortNames.includes(el));
-//
-//       if (isArraySortDirection) {
-//         if (sortDirection.length > value.length) {
-//           return false;
-//         } else {
-//           return isValidSortBy;
-//         }
-//       } else {
-//         return isValidSortBy;
-//       }
-//     } else if (isArraySortDirection) {
-//       return false;
-//     }
-//     return false;
-//   })
-//   .withMessage(
-//     'sortBy shout be string or array with  Blog item types that  access ' +
-//       'for sorting and sortBy Array shout not be less sortDirection Array  ',
-//   );
+const sortByValidator = query('sortBy')
+  .trim()
+  .custom((value, { req }) => {
+    const sortDirection = req.query?.sortDirection;
+    const isArraySortDirection = Array.isArray(sortDirection);
+
+    if (!value) {
+      if (!isArraySortDirection) {
+        return true;
+      }
+    }
+    if (Array.isArray(value)) {
+      const isValidSortBy = value.every((el) => accessSortNames.includes(el));
+
+      if (isArraySortDirection) {
+        if (sortDirection.length > value.length) {
+          return false;
+        } else {
+          return isValidSortBy;
+        }
+      } else {
+        return isValidSortBy;
+      }
+    } else if (isArraySortDirection) {
+      return false;
+    }
+    return false;
+  })
+  .withMessage(
+    'sortBy shout be string or array with  Blog item types that  access ' +
+      'for sorting and sortBy Array shout not be less sortDirection Array  ',
+  );
 
 const sortDirectionValidator = query('sortDirection')
   .trim()
   .custom((value) => {
-    if (accessDirections.includes(value) || !value) {
+    if (!value) {
       return true;
     }
     if (Array.isArray(value)) {
@@ -73,7 +73,7 @@ const searchNameTermValidator = query('searchNameTerm')
 export const queryValidators = [
   pageNumberValidator,
   pageSizeValidator,
-  // sortByValidator,
+  sortByValidator,
   sortDirectionValidator,
   searchNameTermValidator,
   handlerErrorsValidator,
