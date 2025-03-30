@@ -13,6 +13,7 @@ export const queryRepository = {
     const { pageSize, searchNameTerm, formattedSorts, skipBlogs } = queryParams;
 
     const filters = { [searchName]: { $regex: searchNameTerm, $options: 'i' }, ...filterBy } as Filter<T>;
+    console.log(formattedSorts);
     const data = await db
       .collection<T>(nameCollection)
       .find(filters)
@@ -20,7 +21,7 @@ export const queryRepository = {
       .skip(skipBlogs)
       .limit(pageSize)
       .toArray();
-
+    console.log(data);
     return data;
   },
   getCollectionItemById: async <T extends Document>(_id: ObjectId, nameCollection: string) => {

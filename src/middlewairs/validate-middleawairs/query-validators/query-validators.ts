@@ -25,7 +25,7 @@ const sortByValidator = query('sortBy')
   .custom((value, { req }) => {
     const sortDirection = req.query?.sortDirection;
     const isArraySortDirection = Array.isArray(sortDirection);
-
+    console.log(value);
     if (!value || !Array.isArray(value)) {
       if (!isArraySortDirection) {
         return true;

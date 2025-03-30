@@ -5,7 +5,20 @@ import {
   QueryParamsWithFormattedSorts,
 } from '../../../types/general-types/general-query-validator-types';
 
-const sortBySanitizer = query('sortBy').customSanitizer((value) => value || 'createdAt');
+const sortBySanitizer = query('sortBy').customSanitizer((value) => {
+  if (Array.isArray(value)) {
+    let correctValue: string[] = [];
+    for (let sort of value) {
+      if (sort === '') {
+        correctValue.push('createdAt');
+      } else {
+        correctValue.push(sort);
+      }
+    }
+    return correctValue;
+  }
+  return value || 'createdAt';
+});
 
 // const sortDirectionSanitizer = (isCreatedPostByBlogId = false) => {
 //   return query('sortDirection').customSanitizer((value, { req }) => {
@@ -56,6 +69,7 @@ const sortDirectionSanitizer = query('sortDirection').customSanitizer((value, { 
   const sortByValue = req.query?.sortBy;
 
   const isArraySortBy = Array.isArray(sortByValue);
+  console.log(sortByValue);
   const isArraySortDirection = Array.isArray(value);
 
   const sortByLength = sortByValue.length;
