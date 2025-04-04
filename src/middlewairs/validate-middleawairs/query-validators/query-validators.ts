@@ -1,9 +1,8 @@
 import { query } from 'express-validator';
 import { handlerErrorsValidator } from '../utils/handler-errors-validator';
 
-import { AccessDirectionsType, AccessSortNamesType } from '../../../types/general-types/general-query-validator-types';
+import { AccessDirectionsType } from '../../../types/general-types/general-query-validator-types';
 
-const accessSortNames: AccessSortNamesType[] = ['createdAt', 'name'];
 const accessDirections: AccessDirectionsType[] = ['asc', 'desc'];
 
 const pageNumberValidator = query('pageNumber')
@@ -65,17 +64,10 @@ const sortDirectionValidator = query('sortDirection')
   })
   .withMessage('sortDirection shout be string or array with types  asc | desc');
 
-const searchNameTermValidator = query('searchNameTerm')
-  .trim()
-  .customSanitizer((value) => {
-    return value || null;
-  });
-
 export const queryValidators = [
   pageNumberValidator,
   pageSizeValidator,
   sortByValidator,
   sortDirectionValidator,
-  searchNameTermValidator,
   handlerErrorsValidator,
 ];

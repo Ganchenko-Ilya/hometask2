@@ -2,8 +2,8 @@ import { ObjectId } from 'mongodb';
 
 import { postsRepository } from '../../repositories/posts-repository/posts-repository';
 import { RequestPostType } from '../../types/posts-types/posts-type';
-import { newModelPost } from '../../repositories/posts-repository/utils/newModelPost';
-import { updatePostModel } from '../../repositories/posts-repository/utils/updatePostModel';
+import { newModelPost } from './utils/newModelPost';
+import { updatePostModel } from './utils/updatePostModel';
 
 export const postsService = {
   getPosts: async () => {

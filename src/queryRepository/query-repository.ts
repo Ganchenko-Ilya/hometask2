@@ -1,18 +1,17 @@
 import { db } from '../db/db';
 import { PaginationType } from '../types/blogs-types/blogs-type';
-import { VariablesForGetBlogsType } from '../types/general-types/general-query-validator-types';
+import { SearchFilters, VariablesForGetDataType } from '../types/general-types/general-query-validator-types';
 import { ObjectId, WithId, Filter, Document } from 'mongodb';
 
 export const queryRepository = {
   getCollection: async <T extends Document>(
     nameCollection: string,
-    searchName: keyof T,
-    queryParams: VariablesForGetBlogsType,
-    filterBy?: Record<string, unknown>,
+    queryParams: VariablesForGetDataType,
+    filterBy: Record<string, unknown> = {},
   ): Promise<WithId<T>[]> => {
-    const { pageSize, searchNameTerm, formattedSorts, skipBlogs } = queryParams;
+    const { pageSize, formattedSorts, skipBlogs, searchFilters } = queryParams;
 
-    const filters = { [searchName]: { $regex: searchNameTerm, $options: 'i' }, ...filterBy } as Filter<T>;
+    const filters = { ...searchFilters, ...filterBy } as Filter<T>;
 
     const data = await db
       .collection<T>(nameCollection)
@@ -47,17 +46,9 @@ export const queryRepository = {
   mapToResponseWithPagination: <T>(data: T[], pagination: PaginationType) => {
     return { ...pagination, items: data };
   },
-  getTotalCount: async (
-    nameCollection: string,
-    searchBy: string,
-    searchNameTerm: string,
-    filterBy?: Record<string, unknown>,
-  ) => {
+  getTotalCount: async (nameCollection: string, searchItems: SearchFilters, filterBy?: Record<string, unknown>) => {
     return db.collection(nameCollection).countDocuments({
-      [searchBy]: {
-        $regex: searchNameTerm,
-        $options: 'i',
-      },
+      ...searchItems,
       ...filterBy,
     });
   },

@@ -1,5 +1,5 @@
 import { createNewDateFormatISO } from '../../utils/createNewDateFormatISO';
-import { BlogsDbType, NewModelBlogType, RequestBlogType } from '../../../types/blogs-types/blogs-type';
+import { BlogsDbType, RequestBlogType } from '../../../types/blogs-types/blogs-type';
 import { ObjectId } from 'mongodb';
 
 export const newModelBlog = (reqBody: RequestBlogType): BlogsDbType => {

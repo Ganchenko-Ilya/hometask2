@@ -1,4 +1,4 @@
-import { createNewDateFormatISO } from '../../../services/utils/createNewDateFormatISO';
+import { createNewDateFormatISO } from '../../utils/createNewDateFormatISO';
 import { PostsDbType, RequestPostType } from '../../../types/posts-types/posts-type';
 import { ObjectId } from 'mongodb';
 

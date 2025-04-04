@@ -1,21 +1,34 @@
-import { QueryParamsWithFormattedSorts } from '../../types/general-types/general-query-validator-types';
+import {
+  QueryParamsPostsWithFormattedSorts,
+  SearchItems,
+} from '../../types/general-types/general-query-validator-types';
 import { Request, Response } from 'express';
-import { queryRepository } from '../../queryRepositories/query-repository';
+import { queryRepository } from '../../queryRepository/query-repository';
 import { ObjectId } from 'mongodb';
 import { variablesForGetDataSlicesFunc } from '../utils/getVariablesForGetDataSlicesFunc/variablesForGetDataSlicesFunc';
 import { PostsDbType, RequestPostType } from '../../types/posts-types/posts-type';
 import { postsService } from '../../services/posts-service/posts-service';
 import { BlogsDbType } from '../../types/blogs-types/blogs-type';
+import { createSearchFilters } from '../utils/getVariablesForGetDataSlicesFunc/halpers/createSearchFilters';
 
 export const postsController = {
-  getPosts: async (req: Request<unknown, unknown, unknown, QueryParamsWithFormattedSorts>, res: Response) => {
+  getPosts: async (req: Request<unknown, unknown, unknown, QueryParamsPostsWithFormattedSorts>, res: Response) => {
     try {
-      const { searchNameTerm } = req.query;
-      const totalCount = await queryRepository.getTotalCount('posts', 'title', searchNameTerm);
+      const { searchTitleTerm, pageSize, pageNumber, formattedSorts } = req.query;
 
-      const variables = variablesForGetDataSlicesFunc(req.query, totalCount);
+      const searchItems: SearchItems[] = [{ searchBy: 'title', searchTerm: searchTitleTerm }];
+      const searchFilters = createSearchFilters(searchItems);
+      const totalCount = await queryRepository.getTotalCount('posts', searchFilters);
 
-      const posts = await queryRepository.getCollection<PostsDbType>('posts', 'title', variables.variablesForGetData);
+      const variables = variablesForGetDataSlicesFunc({
+        searchFilters,
+        pageSize,
+        pageNumber,
+        formattedSorts,
+        totalCount,
+      });
+
+      const posts = await queryRepository.getCollection<PostsDbType>('posts', variables.variablesForGetData);
 
       const postsWithId = queryRepository.mapToResponseWithId(posts);
 
@@ -24,11 +37,7 @@ export const postsController = {
         variables.variablesForPagination,
       );
 
-      if (postsWithPagination.items.length || !searchNameTerm) {
-        res.status(200).send(postsWithPagination);
-      } else {
-        res.sendStatus(404);
-      }
+      res.status(200).send(postsWithPagination);
     } catch (e) {
       res.sendStatus(500);
     }

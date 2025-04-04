@@ -7,4 +7,5 @@ export const SETTINGS = {
   MONGO_URL: process.env.MONGO_URL || 'mongodb://localhost:27017',
   PATH_BLOGS: '/blogs',
   PATH_POSTS: '/posts',
+  PATH_USERS: '/users',
 };

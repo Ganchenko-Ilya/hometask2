@@ -1,6 +1,11 @@
-import { QueryParamsWithFormattedSorts } from '../../types/general-types/general-query-validator-types';
+import {
+  QueryParamsBlogsWithFormattedSorts,
+  QueryParamsPostsWithFormattedSorts,
+  SearchFilters,
+  SearchItems,
+} from '../../types/general-types/general-query-validator-types';
 import { Request, Response } from 'express';
-import { queryRepository } from '../../queryRepositories/query-repository';
+import { queryRepository } from '../../queryRepository/query-repository';
 import { BlogsDbType, RequestBlogType } from '../../types/blogs-types/blogs-type';
 import { blogService } from '../../services/blog-service/blog-service';
 import { ObjectId } from 'mongodb';
@@ -8,29 +13,34 @@ import { variablesForGetDataSlicesFunc } from '../utils/getVariablesForGetDataSl
 import { postsRepository } from '../../repositories/posts-repository/posts-repository';
 import { PostsDbType, RequestPostByBlogIdTyped } from '../../types/posts-types/posts-type';
 import { postsService } from '../../services/posts-service/posts-service';
+import { createSearchFilters } from '../utils/getVariablesForGetDataSlicesFunc/halpers/createSearchFilters';
 
 export const blogsController = {
-  getBlogs: async (req: Request<unknown, unknown, unknown, QueryParamsWithFormattedSorts>, res: Response) => {
+  getBlogs: async (req: Request<unknown, unknown, unknown, QueryParamsBlogsWithFormattedSorts>, res: Response) => {
     try {
-      const { searchNameTerm } = req.query;
-      const totalCount = await queryRepository.getTotalCount('blogs', 'name', searchNameTerm);
+      const { searchNameTerm, formattedSorts, pageNumber, pageSize } = req.query;
 
-      const variables = variablesForGetDataSlicesFunc(req.query, totalCount);
+      const searchItems = [{ searchBy: 'name', searchTerm: searchNameTerm }];
+      const searchFilters = createSearchFilters(searchItems);
 
-      const blogs = await queryRepository.getCollection<BlogsDbType>('blogs', 'name', variables.variablesForGetData);
+      const totalCount = await queryRepository.getTotalCount('blogs', searchFilters);
 
+      const variables = variablesForGetDataSlicesFunc({
+        formattedSorts,
+        pageNumber,
+        pageSize,
+        searchFilters,
+        totalCount,
+      });
+
+      const blogs = await queryRepository.getCollection<BlogsDbType>('blogs', variables.variablesForGetData);
       const blogsWithId = queryRepository.mapToResponseWithId(blogs);
-
       const blogsWithPagination = queryRepository.mapToResponseWithPagination(
         blogsWithId,
         variables.variablesForPagination,
       );
 
-      if (blogsWithPagination.items.length || !searchNameTerm) {
-        res.status(200).send(blogsWithPagination);
-      } else {
-        res.sendStatus(404);
-      }
+      res.status(200).send(blogsWithPagination);
     } catch (e) {
       res.sendStatus(500);
     }
@@ -52,32 +62,42 @@ export const blogsController = {
     }
   },
   getPostsByBlogId: async (
-    req: Request<{ id: string }, unknown, unknown, QueryParamsWithFormattedSorts>,
+    req: Request<{ id: string }, unknown, unknown, QueryParamsPostsWithFormattedSorts>,
     res: Response,
   ) => {
     try {
+      const { formattedSorts, searchTitleTerm, pageNumber, pageSize } = req.query;
+
       const _id = new ObjectId(req.params.id);
 
       const blog = await queryRepository.getCollectionItemById<BlogsDbType>(_id, 'blogs');
+
       if (blog) {
-        const totalCount = await queryRepository.getTotalCount('posts', 'title', req.query.searchNameTerm, {
+        const searchItems: SearchItems[] = [{ searchBy: 'title', searchTerm: searchTitleTerm }];
+        const searchFilters = createSearchFilters(searchItems);
+
+        const totalCount = await queryRepository.getTotalCount('posts', searchFilters, {
           blogId: req.params.id,
         });
-        const variables = variablesForGetDataSlicesFunc(req.query, totalCount);
-        const posts = await queryRepository.getCollection<PostsDbType>(
-          'posts',
-          'title',
-          variables.variablesForGetData,
-          {
-            blogId: req.params.id,
-          },
-        );
+
+        const variables = variablesForGetDataSlicesFunc({
+          formattedSorts,
+          pageNumber,
+          pageSize,
+          searchFilters,
+          totalCount,
+        });
+
+        const posts = await queryRepository.getCollection<PostsDbType>('posts', variables.variablesForGetData, {
+          blogId: req.params.id,
+        });
         const postsWithId = queryRepository.mapToResponseWithId(posts);
         const postsWithPagination = queryRepository.mapToResponseWithPagination(
           postsWithId,
           variables.variablesForPagination,
         );
-        if (postsWithPagination.items.length || !req.query.searchNameTerm) {
+
+        if (postsWithPagination.items.length || !req.query.searchTitleTerm) {
           res.status(200).send(postsWithPagination);
         } else {
           res.sendStatus(404);
@@ -111,7 +131,7 @@ export const blogsController = {
       if (blog) {
         const variablesForNewPost = { ...req.body, blogId: req.params.id, blogName: blog.name };
         const insertResult = await postsService.createPost(variablesForNewPost);
-        const inserObjectId = insertResult.insertedId as unknown as ObjectId;
+        const inserObjectId = insertResult.insertedId;
         const response = await queryRepository.getCollectionItemById<PostsDbType>(inserObjectId, 'posts');
         if (response) {
           const responseWithId = queryRepository.mapToResponseWithId(response);

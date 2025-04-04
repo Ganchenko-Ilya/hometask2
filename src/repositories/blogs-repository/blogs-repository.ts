@@ -1,6 +1,6 @@
 import { blogsCollection } from '../../db/db';
 
-import { BlogsDbType, NewModelBlogType, RequestBlogType } from '../../types/blogs-types/blogs-type';
+import { BlogsDbType, RequestBlogType } from '../../types/blogs-types/blogs-type';
 import { ObjectId } from 'mongodb';
 
 export const blogsRepository = {
