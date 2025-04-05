@@ -47,7 +47,7 @@ export type SearchItems = {
   searchTerm: string;
 };
 
-export type SearchFilters = { [key: string]: { $regex: string; $options: string } };
+export type SearchFilters = { $or: { [key: string]: { $regex: string; $options: string } }[] };
 
 export type VariablesForGetDataType = {
   pageSize: number;
