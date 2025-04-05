@@ -3,7 +3,11 @@ import { SETTINGS } from '../../../settings';
 
 const ADMIN_AUTH = SETTINGS.ADMIN_AUTH;
 
-export const authAdminMiddleware = (req: Request, res: Response, next: NextFunction) => {
+export const authAdminMiddleware = (
+  req: Request<unknown, unknown, unknown, unknown>,
+  res: Response,
+  next: NextFunction,
+) => {
   const authorization = req.headers.authorization;
   if (authorization) {
     const authToUTF8 = Buffer.from(authorization.slice(6), 'base64').toString('utf-8');

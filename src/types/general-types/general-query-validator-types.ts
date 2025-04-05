@@ -11,22 +11,24 @@ export type QueryParamsType = {
 
 export type QueryParamsBlogsType = {
   searchNameTerm: string;
-  sortBy: string;
+  sortBy: string | string[];
   sortDirection: AccessDirectionsType | AccessDirectionsType[];
   pageNumber: number;
   pageSize: number;
 };
+
 export type QueryParamsPostsType = {
   searchTitleTerm: string;
-  sortBy: string;
+  sortBy: string | string[];
   sortDirection: AccessDirectionsType | AccessDirectionsType[];
   pageNumber: number;
   pageSize: number;
 };
+
 export type QueryParamsUsersType = {
   searchEmailTerm: string;
   searchLoginTerm: string;
-  sortBy: string;
+  sortBy: string | string[];
   sortDirection: AccessDirectionsType | AccessDirectionsType[];
   pageNumber: number;
   pageSize: number;
@@ -36,7 +38,6 @@ export type AddParamsType = {
   formattedSorts: FormattedSortsType;
 };
 
-export type QueryParamsDataWithFormattedSorts = AddParamsType & QueryParamsType;
 export type QueryParamsBlogsWithFormattedSorts = QueryParamsBlogsType & AddParamsType;
 export type QueryParamsPostsWithFormattedSorts = QueryParamsPostsType & AddParamsType;
 export type QueryParamsUsersWithFormattedSorts = QueryParamsUsersType & AddParamsType;
@@ -54,6 +55,7 @@ export type VariablesForGetDataType = {
   searchFilters: SearchFilters;
   skipBlogs: number;
 };
+
 export type RequestQueryVariables = {
   pageSize: number;
   formattedSorts: FormattedSortsType;

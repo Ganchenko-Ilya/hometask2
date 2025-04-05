@@ -1,5 +1,3 @@
-import { queryValidators } from '../../middlewairs/validate-middleawairs/query-validators/query-validators';
-import { queryBaseSanitizers } from '../../middlewairs/query-sanitizers-middleware/query-base-sanitizers/query-base-sanitizers';
 import { blogsController } from '../../controllers/blogs-controller/blogs-controller';
 import { paramIdValidator } from '../../middlewairs/validate-middleawairs/params-validators/param-id-validator';
 import { handlerErrorsValidator } from '../../middlewairs/validate-middleawairs/utils/handler-errors-validator';

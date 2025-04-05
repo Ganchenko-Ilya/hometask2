@@ -3,10 +3,10 @@ import { query } from 'express-validator';
 
 const searchLoginTermSanitizer = query('searchLoginTerm')
   .trim()
-  .customSanitizer((value) => value || null);
+  .customSanitizer((value) => value || '');
 
 const searchEmailTermSanitizer = query('searchEmailTerm')
   .trim()
-  .customSanitizer((value) => value || null);
+  .customSanitizer((value) => value || '');
 
-export const queryUsersSanitizers = [...queryBaseSanitizers, searchLoginTermSanitizer, searchEmailTermSanitizer];
+export const queryUsersSanitizers = [searchLoginTermSanitizer, searchEmailTermSanitizer, ...queryBaseSanitizers];

@@ -1,7 +1,6 @@
 import {
   QueryParamsBlogsWithFormattedSorts,
   QueryParamsPostsWithFormattedSorts,
-  SearchFilters,
   SearchItems,
 } from '../../types/general-types/general-query-validator-types';
 import { Request, Response } from 'express';

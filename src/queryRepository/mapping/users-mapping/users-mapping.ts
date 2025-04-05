@@ -1,4 +1,4 @@
-import { UsersDbWithIdType, UsersResponseType } from '../../types/users-types/users-types';
+import { UsersDbWithIdType, UsersResponseType } from '../../../types/users-types/users-types';
 
 export const usersMapping = {
   mapToResponseUsers: <T extends UsersDbWithIdType>(users: T[] | T) => {

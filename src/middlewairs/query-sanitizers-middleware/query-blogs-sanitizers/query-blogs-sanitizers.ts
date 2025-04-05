@@ -3,4 +3,4 @@ import { query } from 'express-validator';
 
 export const searchNameTermSanitizer = query('searchNameTerm').customSanitizer((value) => value || '');
 
-export const queryBlogsSanitizers = [...queryBaseSanitizers, searchNameTermSanitizer];
+export const queryBlogsSanitizers = [searchNameTermSanitizer, ...queryBaseSanitizers];

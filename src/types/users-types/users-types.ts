@@ -11,6 +11,12 @@ export type UsersDbType = {
 
 export type UsersDbWithIdType = Omit<UsersDbType, '_id'> & { id: string };
 
+export type UsersRequestType = {
+  id: string;
+  login: string;
+  email: string;
+};
+
 export type UsersResponseType = {
   id: string;
   login: string;

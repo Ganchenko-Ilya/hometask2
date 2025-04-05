@@ -1,4 +1,4 @@
-import { websiteUrlReg } from './constants/websiteUrl-reg';
+import { websiteUrlReg } from '../constants/websiteUrl-reg';
 import { createInputDefaultValidator } from '../../utils/create-input-default-validator';
 import { handlerErrorsValidator } from '../../utils/handler-errors-validator';
 

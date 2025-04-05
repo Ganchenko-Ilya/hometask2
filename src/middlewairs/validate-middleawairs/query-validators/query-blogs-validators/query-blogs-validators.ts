@@ -1,4 +1,6 @@
-import { queryValidators } from '../query-validators';
-import { querySearchNameTermValidator } from './query-search-blogs-validators/query-searchName-validator';
+import { queryBaseValidators } from '../query-base-validators/query-base-validators';
+import { query } from 'express-validator';
 
-export const queryBlogsValidators = [querySearchNameTermValidator, ...queryValidators];
+const querySearchNameTermValidator = query('searchNameTerm').trim().isString().withMessage('shout be is string type');
+
+export const queryBlogsValidators = [querySearchNameTermValidator, ...queryBaseValidators];

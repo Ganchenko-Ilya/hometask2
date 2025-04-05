@@ -1,7 +1,7 @@
 import { query } from 'express-validator';
-import { handlerErrorsValidator } from '../utils/handler-errors-validator';
+import { handlerErrorsValidator } from '../../utils/handler-errors-validator';
 
-import { AccessDirectionsType } from '../../../types/general-types/general-query-validator-types';
+import { AccessDirectionsType } from '../../../../types/general-types/general-query-validator-types';
 
 const accessDirections: AccessDirectionsType[] = ['asc', 'desc'];
 
@@ -64,7 +64,7 @@ const sortDirectionValidator = query('sortDirection')
   })
   .withMessage('sortDirection shout be string or array with types  asc | desc');
 
-export const queryValidators = [
+export const queryBaseValidators = [
   pageNumberValidator,
   pageSizeValidator,
   sortByValidator,

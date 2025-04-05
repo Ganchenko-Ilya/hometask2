@@ -8,4 +8,5 @@ export const SETTINGS = {
   PATH_BLOGS: '/blogs',
   PATH_POSTS: '/posts',
   PATH_USERS: '/users',
+  PATH_AUTH: '/auth',
 };
