@@ -5,5 +5,8 @@ export const createSearchFilters = (searchItems: SearchItems[]) => {
   searchItems.forEach((el) => {
     searchFilters.$or.push({ [el.searchBy]: { $regex: el.searchTerm, $options: 'i' } });
   });
-  return searchFilters;
+  if (searchFilters.$or.length) {
+    return searchFilters;
+  }
+  return null;
 };

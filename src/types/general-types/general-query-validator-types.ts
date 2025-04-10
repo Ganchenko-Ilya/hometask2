@@ -52,7 +52,7 @@ export type SearchFilters = { $or: { [key: string]: { $regex: string; $options: 
 export type VariablesForGetDataType = {
   pageSize: number;
   formattedSorts: FormattedSortsType;
-  searchFilters: SearchFilters;
+  searchFilters: SearchFilters | null;
   skipBlogs: number;
 };
 
@@ -60,6 +60,6 @@ export type RequestQueryVariables = {
   pageSize: number;
   formattedSorts: FormattedSortsType;
   pageNumber: number;
-  searchFilters: SearchFilters;
+  searchFilters: SearchFilters | null;
   totalCount: number;
 };

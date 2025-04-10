@@ -46,7 +46,11 @@ export const queryRepository = {
   mapToResponseWithPagination: <T>(data: T[], pagination: PaginationType) => {
     return { ...pagination, items: data };
   },
-  getTotalCount: async (nameCollection: string, searchItems: SearchFilters, filterBy?: Record<string, unknown>) => {
+  getTotalCount: async (
+    nameCollection: string,
+    searchItems: SearchFilters | null,
+    filterBy?: Record<string, unknown>,
+  ) => {
     return db.collection(nameCollection).countDocuments({
       ...searchItems,
       ...filterBy,

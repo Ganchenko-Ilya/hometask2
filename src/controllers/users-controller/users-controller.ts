@@ -18,7 +18,6 @@ export const usersController = {
       const { formattedSorts, pageNumber, pageSize, searchEmailTerm, searchLoginTerm } = req.query;
 
       const searchItems: SearchItems[] = [];
-
       const isSearchLoginTerm = !!searchLoginTerm;
       const isSearchEmailTerm = !!searchEmailTerm;
       if (isSearchLoginTerm) {
@@ -27,6 +26,7 @@ export const usersController = {
       if (isSearchEmailTerm) {
         searchItems.push({ searchBy: 'email', searchTerm: searchEmailTerm });
       }
+
       const searchFilters = createSearchFilters(searchItems);
 
       const totalCount = await queryRepository.getTotalCount('users', searchFilters);
