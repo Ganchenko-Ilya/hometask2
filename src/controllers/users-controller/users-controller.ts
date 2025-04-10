@@ -17,13 +17,16 @@ export const usersController = {
     try {
       const { formattedSorts, pageNumber, pageSize, searchEmailTerm, searchLoginTerm } = req.query;
 
-      const searchItems: SearchItems[] = [
-        { searchBy: 'login', searchTerm: searchLoginTerm },
-        {
-          searchBy: 'email',
-          searchTerm: searchEmailTerm,
-        },
-      ];
+      const searchItems: SearchItems[] = [];
+
+      const isSearchLoginTerm = !!searchLoginTerm;
+      const isSearchEmailTerm = !!searchEmailTerm;
+      if (isSearchLoginTerm) {
+        searchItems.push({ searchBy: 'login', searchTerm: searchLoginTerm });
+      }
+      if (isSearchEmailTerm) {
+        searchItems.push({ searchBy: 'email', searchTerm: searchEmailTerm });
+      }
       const searchFilters = createSearchFilters(searchItems);
 
       const totalCount = await queryRepository.getTotalCount('users', searchFilters);
@@ -35,6 +38,7 @@ export const usersController = {
         totalCount,
         searchFilters,
       });
+
       const users = await queryRepository.getCollection<UsersDbType>('users', variables.variablesForGetData);
       const usersWithId = queryRepository.mapToResponseWithId(users);
       const usersResponse = usersMapping.mapToResponseUsers(usersWithId);
